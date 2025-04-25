@@ -1,10 +1,10 @@
 {
   "name": "nova-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "The all in one - HR smart management tool",
+  "author": "Nelson Chinedu",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
