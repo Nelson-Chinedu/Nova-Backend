@@ -24,9 +24,3 @@ jobs:
 
       - name: Run test
         run: npm test
-
-      - name: Run coverage
-        uses: qltysh/qlty-action/coverage@v1
-        with:
-          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
-          files: coverage/lcov.info
