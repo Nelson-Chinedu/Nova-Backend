@@ -6,12 +6,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SignupModule } from './signup/signup.module';
 
-import ormConfig from '../ormconfig';
+import { config } from '../ormconfig';
+
+import { ProfileModule } from './profile/profile.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot(ormConfig),
+    TypeOrmModule.forRoot(config),
     SignupModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
