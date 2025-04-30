@@ -4,12 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SignupModule } from './auth/signup/signup.module';
+
+import { SignupModule } from './modules/auth/signup/signup.module';
+import { SigninModule } from './modules/auth/signin/signin.module';
+import { EmployeeModule } from './modules/employee/employee.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 import { config } from '../ormconfig';
-
-import { ProfileModule } from './profile/profile.module';
-import { SigninModule } from './auth/signin/signin.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SigninModule } from './auth/signin/signin.module';
     SignupModule,
     ProfileModule,
     SigninModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -43,6 +43,7 @@
     "cookie-parser": "^1.4.7",
     "csrf-csrf": "^3.2.2",
     "dotenv": "^16.5.0",
+    "generate-password": "^1.7.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "ms": "^2.1.3",

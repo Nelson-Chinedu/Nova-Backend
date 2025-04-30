@@ -31,8 +31,8 @@ describe('SigninController', () => {
     expect(signinController).toBeDefined();
   });
 
-  describe('log user', () => {
-    describe('when log user is called', () => {
+  describe('login user', () => {
+    describe('when login user is called', () => {
       test('should log in', async () => {
         const res = mockResponse();
         const result = await signinController.login(signinStub(), res);

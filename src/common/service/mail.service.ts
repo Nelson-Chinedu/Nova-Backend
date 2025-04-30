@@ -13,11 +13,11 @@ export class MailService {
   async sendMail({
     subject,
     recipient,
-    link,
+    body,
   }: {
     subject: string;
     recipient: string;
-    link?: string;
+    body?: string;
   }): Promise<void> {
     const configured_email: string | undefined =
       this.configService.get('MAIL_FROM');
@@ -28,7 +28,7 @@ export class MailService {
         subject,
         from: configured_email,
         to: recipient,
-        html: `<p>welcome</p> <p>${link}</p>`,
+        html: `<p>${body}</p>`,
       });
     } catch (error) {
       if (error instanceof Error) {
