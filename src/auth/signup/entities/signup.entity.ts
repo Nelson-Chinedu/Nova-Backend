@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 // import Profile from 'src/profile/entities/profile.entity';
-import Profile from '../../profile/entities/profile.entity';
+import Profile from '../../../profile/entities/profile.entity';
 
 export enum UserRole {
   USER = 'user',

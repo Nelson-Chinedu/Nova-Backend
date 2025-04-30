@@ -12,7 +12,7 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 
 // import Account from 'src/signup/entities/signup.entity';
-import Account from '../../signup/entities/signup.entity';
+import Account from '../../auth/signup/entities/signup.entity';
 
 export enum Department {
   DESIGN = 'Design',
