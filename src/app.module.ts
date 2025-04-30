@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SignupModule } from './signup/signup.module';
+import { SignupModule } from './auth/signup/signup.module';
 
 import { config } from '../ormconfig';
 
 import { ProfileModule } from './profile/profile.module';
+import { SigninModule } from './auth/signin/signin.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProfileModule } from './profile/profile.module';
     TypeOrmModule.forRoot(config),
     SignupModule,
     ProfileModule,
+    SigninModule,
   ],
   controllers: [AppController],
   providers: [AppService],

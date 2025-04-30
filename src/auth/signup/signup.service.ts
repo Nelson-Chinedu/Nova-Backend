@@ -11,10 +11,10 @@ import * as bcrypt from 'bcrypt';
 import { CreateSignupDto } from './dto/create-signup.dto';
 
 import Account from './entities/signup.entity';
-import Profile from '../profile/entities/profile.entity';
+import Profile from '../../profile/entities/profile.entity';
 
-import { MailService } from '../common/service/mail.service';
-import { TokenService } from '../common/service/token.service';
+import { MailService } from '../../common/service/mail.service';
+import { TokenService } from '../../common/service/token.service';
 @Injectable()
 export class SignupService {
   private readonly saltRounds = 10;
@@ -36,7 +36,6 @@ export class SignupService {
     try {
       return await bcrypt.hash(password, this.saltRounds);
     } catch (error: unknown) {
-      console.log(error, 'ERR');
       if (error instanceof Error) {
         throw new Error(error.message);
       }
