@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SignupService } from '../signup.service';
-import { passwordStub, signupStub } from './stubs/signup.stubs';
 
 jest.mock('../signup.service');
 
@@ -20,14 +19,5 @@ describe('SignupService', () => {
 
   test('it should be defined', () => {
     expect(signupService).toBeDefined();
-  });
-
-  describe('hashPassword', () => {
-    describe('when hashpassword is called', () => {
-      test('it should hash a plain password', async () => {
-        const result = await signupService.hashPassword(signupStub().password);
-        expect(result).toEqual(passwordStub());
-      });
-    });
   });
 });

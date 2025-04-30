@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
-import Account from '../../modules/auth/signup/entities/signup.entity';
+import Account from '../../auth/signup/entities/signup.entity';
 
 export enum Department {
   DESIGN = 'Design',

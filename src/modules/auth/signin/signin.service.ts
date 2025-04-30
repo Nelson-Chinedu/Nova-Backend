@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { SigninDto } from './dto/signin.dto';
 import Account from '../signup/entities/signup.entity';
-import { MailService, TokenService } from '../../common/service';
+import { MailService, TokenService } from '../../../common/service';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -35,7 +35,7 @@ export class SigninService {
       return bcrypt.compare(password, hashPassword);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        throw error;
       }
       throw new InternalServerErrorException('An error occurred');
     }
@@ -73,7 +73,7 @@ export class SigninService {
         await this.mailService.sendMail({
           subject: 'Verify your account',
           recipient: this.configService.get('DEVELOPER_EMAIL') as string,
-          link: `${this.configService.get('CLIENT_URL')}/auth/verify?t=${accessToken}`,
+          body: `${this.configService.get('CLIENT_URL')}/auth/verify?t=${accessToken}`,
         });
 
         throw new ForbiddenException(

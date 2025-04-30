@@ -4,44 +4,27 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { DataSource } from 'typeorm';
 
 import { CreateSignupDto } from './dto/create-signup.dto';
 
 import Account from './entities/signup.entity';
 import Profile from '../../profile/entities/profile.entity';
 
-import { MailService } from '../../common/service/mail.service';
-import { TokenService } from '../../common/service/token.service';
+import { MailService } from '../../../common/service/mail.service';
+import { TokenService } from '../../../common/service/token.service';
+import { HashPasswordService } from '../../../common/service/hash-password.service';
+
 @Injectable()
 export class SignupService {
-  private readonly saltRounds = 10;
   constructor(
-    @InjectRepository(Account) private accountRepository: Repository<Account>,
     private readonly mailService: MailService,
     private configService: ConfigService,
     private token: TokenService,
+    private hashPassword: HashPasswordService,
+    private dataSource: DataSource,
   ) {}
 
-  /**
-   *
-   * @param password
-   * @returns hashed password
-   * @description Hashes the string password using bcrypt with a specified number of salt rounds.
-   * @throws Error if hashing fails
-   */
-  async hashPassword(password: string): Promise<string> {
-    try {
-      return await bcrypt.hash(password, this.saltRounds);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error('Error hashing password');
-    }
-  }
   /**
    *
    * @param createSignupDto
@@ -50,14 +33,13 @@ export class SignupService {
    * @throws Error if an error occurs during the transaction
    */
   async createUser(createSignupDto: CreateSignupDto) {
-    const queryRunner =
-      this.accountRepository.manager.connection.createQueryRunner();
-
-    await queryRunner.connect();
-
-    await queryRunner.startTransaction();
+    const queryRunner = this.dataSource.createQueryRunner();
 
     try {
+      await queryRunner.connect();
+
+      await queryRunner.startTransaction();
+
       const existingUser = await queryRunner.manager.findOne(Account, {
         where: { email: createSignupDto.email },
       });
@@ -66,10 +48,12 @@ export class SignupService {
         throw new ConflictException('Email address already exist');
       }
 
-      const hashedPassword = await this.hashPassword(createSignupDto.password);
+      const hashedPassword = await this.hashPassword.hash(
+        createSignupDto.password,
+      );
 
       const newAccount = queryRunner.manager.create(Account, {
-        ...createSignupDto,
+        email: createSignupDto.email,
         password: hashedPassword,
       });
 
@@ -92,7 +76,7 @@ export class SignupService {
       await this.mailService.sendMail({
         subject: 'welcome new user',
         recipient: this.configService.get('DEVELOPER_EMAIL') as string,
-        link: `${this.configService.get('CLIENT_URL')}/auth/verify?t=${accessToken}`,
+        body: `${this.configService.get('CLIENT_URL')}/auth/verify?t=${accessToken}`,
       });
 
       return {

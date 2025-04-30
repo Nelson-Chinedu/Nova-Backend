@@ -2,8 +2,8 @@ import { Controller, Post, Body, HttpCode, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { SigninService } from './signin.service';
 import { SigninDto } from './dto/signin.dto';
-import { ValidationPipe } from '../../common/pipes/validation.pipe';
-import { cookieOptions } from '../../common/constant/cookieOptions';
+import { ValidationPipe } from '../../../common/pipes/validation.pipe';
+import { cookieOptions } from '../../../common/constant/cookieOptions';
 
 @Controller('auth')
 export class SigninController {

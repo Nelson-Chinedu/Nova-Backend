@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import Account from 'src/auth/signup/entities/signup.entity';
+import Account from 'src/modules/auth/signup/entities/signup.entity';
 import { Repository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 
