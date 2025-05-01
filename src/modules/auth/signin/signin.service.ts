@@ -68,7 +68,7 @@ export class SigninService {
 
       const accessToken: string = await this.token.createToken({
         sub: account.id,
-        role: 'HR', // get the role from the account
+        role: 'hr', // get the role from the account
       });
 
       if (process.env.NODE_ENV === 'production' && !account.verified) {

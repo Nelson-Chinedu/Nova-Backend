@@ -60,7 +60,7 @@ export class SignupService {
 
       const accessToken: string = await this.token.createToken({
         sub: newAccount.id,
-        role: 'HR', // look for how to default this role
+        role: 'hr', // look for how to default this role
       });
 
       await queryRunner.manager.save(newAccount);

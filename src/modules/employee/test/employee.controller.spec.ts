@@ -36,4 +36,14 @@ describe('SignupController', () => {
       });
     });
   });
+
+  describe('get all employees', () => {
+    describe('when get employees is called', () => {
+      test('then it should call getEmployeesService', async () => {
+        const result = await employeeController.getAllEmployees();
+        expect(employeeService.getAllEmployees).toHaveBeenCalled();
+        expect(result).toEqual([responseStub()]);
+      });
+    });
+  });
 });
