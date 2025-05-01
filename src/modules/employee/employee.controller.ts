@@ -1,9 +1,17 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Get,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCookieAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -27,6 +35,7 @@ import { SYSTEM_ROLES } from '../../common/constant/system-roles';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
+  // Create new employees
   @ApiOperation({ summary: 'Create a new employee' })
   @ApiCreatedResponse({
     description: 'Employee added successfully',
@@ -48,5 +57,15 @@ export class EmployeeController {
     message: string;
   }> {
     return this.employeeService.create(createEmployeeDto);
+  }
+
+  // Fetch all employees
+  @ApiOperation({ summary: 'Fetch all employees' })
+  @ApiOkResponse({ description: 'Employees list', type: [CreateEmployeeDto] })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getAllEmployees() {
+    return this.employeeService.getAllEmployees();
   }
 }
