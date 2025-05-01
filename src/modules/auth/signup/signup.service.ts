@@ -9,6 +9,7 @@ import { DataSource } from 'typeorm';
 import { CreateSignupDto } from './dto/create-signup.dto';
 
 import Account from './entities/signup.entity';
+
 import Profile from '../../profile/entities/profile.entity';
 
 import { MailService } from '../../../common/service/mail.service';
@@ -57,11 +58,10 @@ export class SignupService {
         password: hashedPassword,
       });
 
-      const accessToken: string = this.token.createToken(
-        { id: newAccount.id },
-        this.configService.get('VERIFICATION_JWT_kEY') as string,
-        '2d',
-      );
+      const accessToken: string = await this.token.createToken({
+        sub: newAccount.id,
+        role: 'HR', // look for how to default this role
+      });
 
       await queryRunner.manager.save(newAccount);
 

@@ -1,21 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import ms from 'ms';
+import { JwtService } from '@nestjs/jwt';
 
 type JwtPayload = {
-  id: string;
+  sub: string;
+  role: string;
 };
 
 @Injectable()
 export class TokenService {
-  constructor() {}
-  createToken(
-    payload: JwtPayload,
-    secret: string,
-    expiresIn: ms.StringValue,
-  ): string {
+  constructor(private jwtService: JwtService) {}
+  createToken(payload: JwtPayload): Promise<string> {
     try {
-      const token = jwt.sign(payload, secret, { expiresIn });
+      const token = this.jwtService.signAsync(payload);
       return token;
     } catch (error: unknown) {
       if (error instanceof Error) {

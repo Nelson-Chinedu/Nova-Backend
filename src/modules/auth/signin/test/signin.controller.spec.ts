@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SigninController } from '../signin.controller';
-import { SigninService } from '../signin.service';
-import { responseStub, signinStub } from './stubs/signin.stubs';
 import { Response } from 'express';
+
+import { SigninController } from '../signin.controller';
+
+import { SigninService } from '../signin.service';
+
+import { responseStub, signinStub } from './stubs/signin.stubs';
 
 jest.mock('../signin.service');
 

@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SignupService } from '../signup.service';
+
 import { SignupController } from '../signup.controller';
+
 import { signupStub, newUserStub } from './stubs/signup.stubs';
 
 jest.mock('../signup.service');

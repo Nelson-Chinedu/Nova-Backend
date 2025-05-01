@@ -4,13 +4,16 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
-import { SigninDto } from './dto/signin.dto';
-import Account from '../signup/entities/signup.entity';
-import { MailService, TokenService } from '../../../common/service';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+
+import { SigninDto } from './dto/signin.dto';
+
+import Account from '../signup/entities/signup.entity';
+
+import { MailService, TokenService } from '../../../common/service';
 
 @Injectable()
 export class SigninService {
@@ -18,7 +21,7 @@ export class SigninService {
     @InjectRepository(Account) private accountRepository: Repository<Account>,
     private readonly mailService: MailService,
     private configService: ConfigService,
-    private token: TokenService,
+    private readonly token: TokenService,
   ) {}
 
   /**
@@ -63,11 +66,10 @@ export class SigninService {
           'Your account is blocked, kindly contact admin',
         );
 
-      const accessToken: string = this.token.createToken(
-        { id: account.id },
-        this.configService.get('VERIFICATION_JWT_kEY') as string,
-        '2d',
-      );
+      const accessToken: string = await this.token.createToken({
+        sub: account.id,
+        role: 'HR', // get the role from the account
+      });
 
       if (process.env.NODE_ENV === 'production' && !account.verified) {
         await this.mailService.sendMail({
