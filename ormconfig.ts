@@ -1,19 +1,16 @@
 import * as dotenv from 'dotenv';
-import * as path from 'path';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
+import Account from './src/modules/auth/signup/entities/signup.entity';
+
+import Profile from './src/modules/profile/entities/profile.entity';
+
 import getEnv from './src/helpers/getEnv';
-import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
 const isDevEnv = () => process.env.NODE_ENV === 'development';
-
-const entities = isDevEnv()
-  ? `${path.join(__dirname, '**', '*.entity.js')}`
-  : `${path.join(__dirname, '**', '*.entity.js')}`;
-
-console.log(entities);
 
 const getDbType = (): TypeOrmModuleOptions['type'] => {
   const dbType = process.env.DB_TYPE;
@@ -51,11 +48,10 @@ export const config = {
   username: getEnv('DB_USERNAME'),
   password: getEnv('DB_PASSWORD'),
   database: getEnv('DB_DATABASE'),
-  entities: [entities],
+  entities: [Account, Profile],
   migrations: ['dist/src/db/migrations/*.js'],
   // synchronize: isDevEnv() ? true : false,
   logging: isDevEnv() ? true : false,
-  // autoLoadEntities: true,
   cli: {
     // entitiesDir: 'dist/src/db/entity',
     entitiesDir: 'dist/src/**/*.entity.js',
