@@ -1,26 +1,21 @@
-import { v4 as uuidV4 } from 'uuid';
 import {
   BaseEntity,
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   Index,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import Profile from '../../../profile/entities/profile.entity';
 
-export enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin',
-}
+import { SYSTEM_ROLES } from '../../../../common/constant/system-roles';
 
 @Entity('Account')
 export default class Account extends BaseEntity {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Index({ unique: true })
@@ -38,8 +33,8 @@ export default class Account extends BaseEntity {
 
   @Column({
     type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
+    enum: SYSTEM_ROLES,
+    default: SYSTEM_ROLES.USER,
   })
   role: string;
 
@@ -51,9 +46,4 @@ export default class Account extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @BeforeInsert()
-  addId() {
-    this.id = uuidV4();
-  }
 }
