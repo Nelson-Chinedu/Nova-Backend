@@ -5,6 +5,9 @@ import {
   HttpCode,
   HttpStatus,
   Get,
+  Query,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -65,7 +68,10 @@ export class EmployeeController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAllEmployees() {
-    return this.employeeService.getAllEmployees();
+  async getAllEmployees(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return this.employeeService.getAllEmployees(page, limit);
   }
 }

@@ -97,27 +97,34 @@ export class EmployeeService {
     }
   }
 
-  async getAllEmployees() {
+  async getAllEmployees(page: number, limit: number) {
     try {
-      const employees: Profile[] = await this.dataSource
+      const [data, total] = await this.dataSource
         .getRepository(Profile)
         .createQueryBuilder('profile')
-        .leftJoinAndSelect('profile.account', 'account')
+        .leftJoin('profile.account', 'account')
         .select([
-          'profile.id as id',
-          'profile.firstname as firstname',
-          'profile.lastname as lastname',
-          'profile.phone_number as phone_number',
-          'profile.department as department',
-          'profile.job_title as job_title',
-          'profile.contract_type as contract_type',
-          'profile.image_url as image_url',
-          'profile.createdAt as created_at',
-          'profile.updatedAt as updated_at',
-          'account.email as email',
+          'profile.id',
+          'profile.firstname',
+          'profile.lastname',
+          'profile.phone_number',
+          'profile.department',
+          'profile.job_title',
+          'profile.contract_type',
+          'profile.image_url',
+          'profile.createdAt',
+          'profile.updatedAt',
+          'account.email',
         ])
-        .getRawMany();
-      return employees;
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+      return {
+        data,
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw error;
