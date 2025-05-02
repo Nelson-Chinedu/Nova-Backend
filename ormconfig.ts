@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import Account from './src/modules/auth/signup/entities/signup.entity';
+import Account from './src/modules/auth/entities/account.entity';
 
 import Profile from './src/modules/profile/entities/profile.entity';
 

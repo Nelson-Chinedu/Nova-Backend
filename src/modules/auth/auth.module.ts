@@ -1,19 +1,22 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SignupService } from './signup.service';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
 
-import { SignupController } from './signup.controller';
+import Account from '../auth/entities/account.entity';
 
 import {
   MailService,
   TokenService,
   HashPasswordService,
-} from '../../../common/service';
+} from '../../common/service';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Account]),
     JwtModule.registerAsync({
       imports: [],
       inject: [ConfigService],
@@ -25,7 +28,7 @@ import {
       }),
     }),
   ],
-  controllers: [SignupController],
-  providers: [SignupService, MailService, TokenService, HashPasswordService],
+  controllers: [AuthController],
+  providers: [AuthService, MailService, TokenService, HashPasswordService],
 })
-export class SignupModule {}
+export class AuthModule {}

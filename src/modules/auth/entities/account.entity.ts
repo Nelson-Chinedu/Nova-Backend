@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import Profile from '../../../profile/entities/profile.entity';
+import Profile from '../../profile/entities/profile.entity';
 
-import { SYSTEM_ROLES } from '../../../../common/constant/system-roles';
+import { SYSTEM_ROLES } from '../../../common/constant/system-roles';
 
 @Entity('Account')
 export default class Account extends BaseEntity {
