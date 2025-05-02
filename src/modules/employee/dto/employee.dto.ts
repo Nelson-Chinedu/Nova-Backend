@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsEmail,
@@ -55,13 +55,13 @@ export class CreateEmployeeDto {
 }
 
 export class ConflictResponseDto {
-  @ApiProperty({ example: 'Email address already exist' })
+  @ApiPropertyOptional({ example: 'Email address already exist' })
   message: string;
 
-  @ApiProperty({ example: 'Conflict' })
+  @ApiPropertyOptional({ example: 'Conflict' })
   error: string;
 
-  @ApiProperty({ example: 409 })
+  @ApiPropertyOptional({ example: 409 })
   statusCode: 409;
 }
 
@@ -124,12 +124,12 @@ export class EmployeeResponseDto {
 }
 
 export class NotFoundEmployeeDto {
-  @ApiProperty({ example: 'Employee with id not found' })
+  @ApiPropertyOptional({ example: 'Employee with id not found' })
   message: string;
 
-  @ApiProperty({ example: 'Not Found' })
+  @ApiPropertyOptional({ example: 'Not Found' })
   error: string;
 
-  @ApiProperty({ example: 404 })
+  @ApiPropertyOptional({ example: 404 })
   statusCode: number;
 }
