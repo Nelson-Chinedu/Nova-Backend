@@ -4,7 +4,11 @@ import { EmployeeService } from '../employee.service';
 
 import { EmployeeController } from '../employee.controller';
 
-import { employeeStub, responseStub } from './stubs/employee.stubs';
+import {
+  employeeResponseStub,
+  employeeStub,
+  responseStub,
+} from './stubs/employee.stubs';
 
 jest.mock('../employee.service');
 
@@ -42,7 +46,19 @@ describe('SignupController', () => {
       test('then it should call getEmployeesService', async () => {
         const result = await employeeController.getAllEmployees(1, 10);
         expect(employeeService.getAllEmployees).toHaveBeenCalled();
-        expect(result).toEqual([responseStub()]);
+        expect(result).toEqual([employeeResponseStub()]);
+      });
+    });
+  });
+
+  describe('get employee', () => {
+    describe('when get employee is called', () => {
+      test('then it should call getEmployeeService', async () => {
+        const result = await employeeController.getEmployee(
+          '537ed35f-d6b8-46cb-963c-b7b1631b2a2f',
+        );
+        expect(employeeService.getEmployee).toHaveBeenCalled();
+        expect(result).toEqual(employeeResponseStub());
       });
     });
   });

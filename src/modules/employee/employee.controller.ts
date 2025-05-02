@@ -8,12 +8,15 @@ import {
   Query,
   ParseIntPipe,
   DefaultValuePipe,
+  Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCookieAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -25,7 +28,9 @@ import { EmployeeService } from './employee.service';
 import {
   ConflictResponseDto,
   CreateEmployeeDto,
-} from './dto/create-employee.dto';
+  EmployeeResponseDto,
+  NotFoundEmployeeDto,
+} from './dto/employee.dto';
 
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -38,7 +43,11 @@ import { SYSTEM_ROLES } from '../../common/constant/system-roles';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  // Create new employees
+  /**
+   * Create a new employee
+   * @param createEmployeeDto
+   * @returns {object}
+   */
   @ApiOperation({ summary: 'Create a new employee' })
   @ApiCreatedResponse({
     description: 'Employee added successfully',
@@ -62,9 +71,14 @@ export class EmployeeController {
     return this.employeeService.create(createEmployeeDto);
   }
 
-  // Fetch all employees
+  /**
+   * Get all employees
+   * @param {number} page - current page number
+   * @param {number} limit - the number of items per page
+   * @returns {object[]}
+   */
   @ApiOperation({ summary: 'Fetch all employees' })
-  @ApiOkResponse({ description: 'Employees list', type: [CreateEmployeeDto] })
+  @ApiOkResponse({ description: 'Employees list', type: [EmployeeResponseDto] })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -73,5 +87,22 @@ export class EmployeeController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ) {
     return this.employeeService.getAllEmployees(page, limit);
+  }
+
+  /**
+   * Get an employee
+   * @param {uuid} id
+   * @returns {object}
+   */
+  @ApiOperation({ summary: 'Get single employee' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({ description: 'Ok', type: EmployeeResponseDto })
+  @ApiNotFoundResponse({
+    description: 'Employee not found',
+    type: NotFoundEmployeeDto,
+  })
+  @Get(':id')
+  async getEmployee(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.employeeService.getEmployee(id);
   }
 }
