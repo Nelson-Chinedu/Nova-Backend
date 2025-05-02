@@ -9,8 +9,7 @@ import { generate } from 'generate-password';
 
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 
-import Account from '../auth/signup/entities/signup.entity';
-
+import Account from '../auth/entities/account.entity';
 import Profile from '../profile/entities/profile.entity';
 
 import { HashPasswordService, MailService } from '../../common/service/';

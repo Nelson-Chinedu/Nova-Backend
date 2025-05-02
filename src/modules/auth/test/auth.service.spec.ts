@@ -1,23 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SignupService } from '../signup.service';
+import { AuthService } from '../auth.service';
 
-jest.mock('../signup.service');
+jest.mock('../auth.service');
 
-describe('SignupService', () => {
-  let signupService: SignupService;
+describe('AuthService', () => {
+  let authService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [SignupService],
+      providers: [AuthService],
       controllers: [],
     }).compile();
-    signupService = module.get<SignupService>(SignupService);
+    authService = module.get<AuthService>(AuthService);
 
     jest.clearAllMocks();
   });
 
   test('it should be defined', () => {
-    expect(signupService).toBeDefined();
+    expect(authService).toBeDefined();
   });
 });

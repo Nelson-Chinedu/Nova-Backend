@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-import Account from '../../modules/auth/signup/entities/signup.entity';
+import Account from '../../modules/auth/entities/account.entity';
 import Profile from '../../modules/profile/entities/profile.entity';
 
 import { SYSTEM_ROLES } from '../../common/constant/system-roles';
