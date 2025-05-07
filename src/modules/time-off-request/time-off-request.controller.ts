@@ -54,7 +54,7 @@ export class TimeoffRequestsController {
    * @param res
    * @returns {object}
    */
-  @ApiOperation({ summary: 'Create time off requests' })
+  @ApiOperation({ summary: 'Create time off requests (Employee)' })
   @ApiCreatedResponse({
     description: 'Request time off created successfully',
     type: CreateTimeOffResponse,
