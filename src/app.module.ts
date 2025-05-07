@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { TimeOffRequestsModule } from './modules/time-off-request/time-off-request.module';
 
 import { config } from '../ormconfig';
 
@@ -23,6 +24,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     ProfileModule,
     AuthModule,
     EmployeeModule,
+    TimeOffRequestsModule,
   ],
   controllers: [AppController],
   providers: [
