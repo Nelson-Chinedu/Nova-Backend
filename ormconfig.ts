@@ -6,6 +6,8 @@ import Account from './src/modules/auth/entities/account.entity';
 
 import Profile from './src/modules/profile/entities/profile.entity';
 
+import TimeOffRequests from 'src/modules/time-off-request/entities/time-off-requests.entity';
+
 import getEnv from './src/helpers/getEnv';
 
 dotenv.config();
@@ -48,7 +50,7 @@ export const config = {
   username: getEnv('DB_USERNAME'),
   password: getEnv('DB_PASSWORD'),
   database: getEnv('DB_DATABASE'),
-  entities: [Account, Profile],
+  entities: [Account, Profile, TimeOffRequests],
   migrations: ['dist/src/db/migrations/*.js'],
   // synchronize: isDevEnv() ? true : false,
   logging: isDevEnv() ? true : false,

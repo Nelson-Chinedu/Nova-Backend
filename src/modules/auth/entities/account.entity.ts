@@ -4,12 +4,14 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import Profile from '../../profile/entities/profile.entity';
+import TimeOffRequests from '../../time-off-request/entities/time-off-requests.entity';
 
 import { SYSTEM_ROLES } from '../../../common/constant/system-roles';
 
@@ -40,6 +42,12 @@ export default class Account extends BaseEntity {
 
   @OneToOne(() => Profile, (profile: Profile) => profile.account)
   profile: Profile;
+
+  @OneToMany(
+    () => TimeOffRequests,
+    (timeOffRequests: TimeOffRequests) => timeOffRequests.account,
+  )
+  timeOffRequests: TimeOffRequests[];
 
   @CreateDateColumn()
   createdAt: Date;
