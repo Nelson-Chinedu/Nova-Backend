@@ -48,6 +48,9 @@ export default class Profile extends BaseEntity {
   @Column('varchar', { default: '' })
   image_url: string;
 
+  @Column('varchar', { length: 30, default: '' })
+  date_of_birth: string;
+
   @OneToOne(() => Account, (account: Account) => account.profile, {
     onDelete: 'CASCADE',
     eager: true,
