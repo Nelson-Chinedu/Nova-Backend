@@ -12,7 +12,7 @@ import {
 import Account from '../../auth/entities/account.entity';
 import Profile from '../../profile/entities/profile.entity';
 
-enum REQUEST_STATUS {
+export enum REQUEST_STATUS {
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',

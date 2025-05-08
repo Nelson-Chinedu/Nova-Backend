@@ -10,6 +10,13 @@ import TimeOffRequests from '../time-off-request/entities/time-off-requests.enti
 import Account from '../auth/entities/account.entity';
 import Profile from '../profile/entities/profile.entity';
 
+import { IStatus } from './dto/time-off.dto';
+
+interface IPayload {
+  id: string;
+  status: IStatus;
+}
+
 @Injectable()
 export class TimeOffRequestsService {
   constructor(
@@ -131,6 +138,33 @@ export class TimeOffRequestsService {
       }
 
       return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async updateRequest(payload: IPayload) {
+    const { id, status } = payload;
+    try {
+      const result = await this.timeOffRequestsRepository.findOneBy({ id });
+
+      if (!result) {
+        throw new NotFoundException(`Time off request with id ${id} not found`);
+      }
+
+      await this.dataSource
+        .createQueryBuilder()
+        .update(TimeOffRequests)
+        .set({
+          status,
+        })
+        .where('id = :id', { id })
+        .execute();
+
+      return { message: 'Time off request updated successfully' };
     } catch (error) {
       if (error instanceof Error) {
         throw error;

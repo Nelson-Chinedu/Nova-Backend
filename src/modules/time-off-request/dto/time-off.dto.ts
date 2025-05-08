@@ -1,16 +1,22 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsEnum,
   IsNotEmpty,
   IsString,
   registerDecorator,
   ValidationArguments,
   ValidationOptions,
 } from 'class-validator';
+import { REQUEST_STATUS } from '../entities/time-off-requests.entity';
 
 type DateProp = {
   leaveFrom: string;
   leaveTo: string;
 };
+
+export interface IStatus {
+  status: 'approved' | 'rejected' | 'pending';
+}
 
 const IsValidLeaveRange = (validationOptions?: ValidationOptions) => {
   return function (object: object, propertyName: string) {
@@ -33,6 +39,7 @@ const IsValidLeaveRange = (validationOptions?: ValidationOptions) => {
     });
   };
 };
+
 export class CreateTimeOffDto {
   @ApiProperty({ description: 'Leave type', example: 'Annual leave' })
   @IsString()
@@ -116,4 +123,22 @@ export class NotFoundRequestDto {
 
   @ApiPropertyOptional({ example: 404 })
   statusCode: number;
+}
+
+export class StatusDto {
+  @ApiProperty({
+    enum: REQUEST_STATUS,
+    example: REQUEST_STATUS.APPROVED,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @IsEnum(REQUEST_STATUS, {
+    message: 'Status can either be pending, approved or rejected',
+  })
+  status: IStatus;
+}
+
+export class TimeOffRequestUpdateResponse {
+  @ApiProperty({ example: 'Time off request updated successfully' })
+  message: string;
 }
