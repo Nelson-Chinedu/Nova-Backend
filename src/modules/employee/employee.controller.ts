@@ -19,6 +19,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -78,6 +79,8 @@ export class EmployeeController {
    * @returns {object[]}
    */
   @ApiOperation({ summary: 'Fetch all employees' })
+  @ApiQuery({ name: 'page', required: false, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
   @ApiOkResponse({ description: 'Employees list', type: [EmployeeResponseDto] })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Get()

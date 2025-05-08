@@ -5,7 +5,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Query,
   Req,
@@ -14,6 +16,7 @@ import {
   ApiBadRequestResponse,
   ApiCookieAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
@@ -27,6 +30,7 @@ import { TimeOffRequestsService } from './time-off-request.service';
 import {
   CreateTimeOffDto,
   CreateTimeOffResponse,
+  NotFoundRequestDto,
   TimeOffRequestsResponse,
 } from './dto/create-time-off.dto';
 
@@ -122,5 +126,23 @@ export class TimeoffRequestsController {
     lastPage: number;
   }> {
     return this.timeOffRequestsService.getTimeOffRequests(page, limit);
+  }
+
+  /**
+   * Get an employee
+   * @param {uuid} id - the id of the time off request
+   * @returns {object}
+   */
+  @ApiOperation({ summary: 'Get single time off request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({ description: 'Ok', type: TimeOffRequestsResponse })
+  @ApiNotFoundResponse({
+    description: 'Time off request not found',
+    type: NotFoundRequestDto,
+  })
+  @Roles(SYSTEM_ROLES.HR, SYSTEM_ROLES.USER, SYSTEM_ROLES.ADMIN)
+  @Get(':id')
+  async getTimeOffRequest(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.timeOffRequestsService.getTimeOffRequest(id);
   }
 }
