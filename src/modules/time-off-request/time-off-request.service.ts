@@ -87,6 +87,7 @@ export class TimeOffRequestsService {
           'timeOffRequests.updatedAt',
           'profile.firstname',
           'profile.lastname',
+          'profile.image_url',
         ])
         .skip((page - 1) * limit)
         .take(limit)
