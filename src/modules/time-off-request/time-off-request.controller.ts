@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -31,8 +32,10 @@ import {
   CreateTimeOffDto,
   CreateTimeOffResponse,
   NotFoundRequestDto,
+  StatusDto,
   TimeOffRequestsResponse,
-} from './dto/create-time-off.dto';
+  TimeOffRequestUpdateResponse,
+} from './dto/time-off.dto';
 
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -144,5 +147,25 @@ export class TimeoffRequestsController {
   @Get(':id')
   async getTimeOffRequest(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.timeOffRequestsService.getTimeOffRequest(id);
+  }
+
+  @ApiOperation({ summary: 'Update time off request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({ description: 'Ok', type: TimeOffRequestUpdateResponse })
+  @ApiNotFoundResponse({
+    description: 'Time off request not found',
+    type: NotFoundRequestDto,
+  })
+  @Roles(SYSTEM_ROLES.HR, SYSTEM_ROLES.ADMIN)
+  @Patch(':id')
+  async updateRequest(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body(new ValidationPipe()) status: StatusDto,
+  ) {
+    const payload = {
+      id,
+      ...status,
+    };
+    return this.timeOffRequestsService.updateRequest(payload);
   }
 }
