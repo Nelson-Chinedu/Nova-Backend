@@ -2,12 +2,14 @@ import { DataSource } from 'typeorm';
 
 import Account from '../../modules/auth/entities/account.entity';
 import Profile from '../../modules/profile/entities/profile.entity';
+// import TimeOffRequests from '../../modules/time-off-request/entities/time-off-requests.entity';
 
 import { SYSTEM_ROLES } from '../../common/constant/system-roles';
 
 export async function seedAccount(dataSource: DataSource) {
   const accountRepo = dataSource.getRepository(Account);
   const profileRepo = dataSource.getRepository(Profile);
+  // const timeOffRequestsRepo = dataSource.getRepository(TimeOffRequests);
 
   try {
     await dataSource.query(`TRUNCATE TABLE "Profile", "Account" CASCADE`);
