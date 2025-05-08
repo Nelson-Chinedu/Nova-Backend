@@ -12,6 +12,12 @@ import {
 import Account from '../../auth/entities/account.entity';
 import Profile from '../../profile/entities/profile.entity';
 
+enum REQUEST_STATUS {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+}
+
 @Entity('TimeOffRequests')
 export default class TimeOffRequests extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -28,6 +34,13 @@ export default class TimeOffRequests extends BaseEntity {
 
   @Column('int', { nullable: true })
   leaveDays: number;
+
+  @Column({
+    type: 'enum',
+    enum: REQUEST_STATUS,
+    default: REQUEST_STATUS.PENDING,
+  })
+  status: string;
 
   @ManyToOne(() => Account, (account: Account) => account.timeOffRequests, {
     eager: true,

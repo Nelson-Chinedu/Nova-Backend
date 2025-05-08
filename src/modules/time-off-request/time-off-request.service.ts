@@ -83,8 +83,11 @@ export class TimeOffRequestsService {
           'timeOffRequests.leaveFrom',
           'timeOffRequests.leaveTo',
           'timeOffRequests.leaveDays',
+          'timeOffRequests.createdAt',
+          'timeOffRequests.updatedAt',
           'profile.firstname',
           'profile.lastname',
+          'profile.image_url',
         ])
         .skip((page - 1) * limit)
         .take(limit)
@@ -96,6 +99,38 @@ export class TimeOffRequestsService {
         page,
         lastPage: Math.ceil(total / limit),
       };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async getTimeOffRequest(id: string) {
+    try {
+      const result = await this.dataSource
+        .getRepository(TimeOffRequests)
+        .createQueryBuilder('timeOffRequest')
+        .leftJoin('timeOffRequest.profile', 'profile')
+        .select([
+          'timeOffRequest',
+          'profile.firstname',
+          'profile.lastname',
+          'profile.phone_number',
+          'profile.department',
+          'profile.job_title',
+          'profile.contract_type',
+          'profile.image_url',
+        ])
+        .where('timeOffRequest.id = :id', { id })
+        .getOne();
+
+      if (!result) {
+        throw new NotFoundException(`Time off request with id ${id} not found`);
+      }
+
+      return result;
     } catch (error) {
       if (error instanceof Error) {
         throw error;

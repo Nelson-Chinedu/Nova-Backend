@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -64,6 +64,21 @@ export class ProfileDto {
 
   @ApiProperty({ example: 'Doe' })
   lastname: string;
+
+  @ApiProperty({ example: '+23493939939939' })
+  phone_number: string;
+
+  @ApiProperty({ example: 'Engineering' })
+  department: string;
+
+  @ApiProperty({ example: 'Software Engineer' })
+  job_title: string;
+
+  @ApiProperty({ example: 'Full time' })
+  contract_type: string;
+
+  @ApiProperty({ example: 'https://www/cloudinary.com/' })
+  image_url: string;
 }
 
 export class TimeOffRequestsResponse {
@@ -84,4 +99,21 @@ export class TimeOffRequestsResponse {
 
   @ApiProperty({ type: ProfileDto })
   profile: ProfileDto;
+
+  @ApiProperty({ example: '2025-05-02T17:05:54.933Z' })
+  createdAt: string;
+
+  @ApiProperty({ example: '2025-05-02T17:05:54.933Z' })
+  updatedAt: string;
+}
+
+export class NotFoundRequestDto {
+  @ApiPropertyOptional({ example: 'Time off request with id not found' })
+  message: string;
+
+  @ApiPropertyOptional({ example: 'Not Found' })
+  error: string;
+
+  @ApiPropertyOptional({ example: 404 })
+  statusCode: number;
 }
