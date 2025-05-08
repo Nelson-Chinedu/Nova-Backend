@@ -129,7 +129,7 @@ export class TimeoffRequestsController {
   }
 
   /**
-   * Get an employee
+   * Get time off request detail
    * @param {uuid} id - the id of the time off request
    * @returns {object}
    */
