@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
@@ -12,6 +13,7 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 
 import Account from '../../auth/entities/account.entity';
+import TimeOffRequests from '../../time-off-request/entities/time-off-requests.entity';
 
 export enum Department {
   DESIGN = 'Design',
@@ -52,6 +54,12 @@ export default class Profile extends BaseEntity {
   })
   @JoinColumn()
   account: Account;
+
+  @OneToMany(
+    () => TimeOffRequests,
+    (timeOffRequests: TimeOffRequests) => timeOffRequests.account,
+  )
+  timeOffRequests: TimeOffRequests[];
 
   @CreateDateColumn()
   createdAt: Date;
