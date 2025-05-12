@@ -16,6 +16,7 @@ import { config } from '../ormconfig';
 
 import { AuthGuard } from './common/guards/auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+import { RecruitmentModule } from './modules/recruitment/recruitment.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     AuthModule,
     EmployeeModule,
     TimeOffRequestsModule,
+    RecruitmentModule,
   ],
   controllers: [AppController],
   providers: [

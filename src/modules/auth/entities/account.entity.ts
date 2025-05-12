@@ -12,6 +12,7 @@ import {
 
 import Profile from '../../profile/entities/profile.entity';
 import TimeOffRequests from '../../time-off-request/entities/time-off-requests.entity';
+import Recruitment from '../../recruitment/entities/recruitment.entity';
 
 import { SYSTEM_ROLES } from '../../../common/constant/system-roles';
 
@@ -42,6 +43,12 @@ export default class Account extends BaseEntity {
 
   @OneToOne(() => Profile, (profile: Profile) => profile.account)
   profile: Profile;
+
+  @OneToOne(
+    () => Recruitment,
+    (recruitment: Recruitment) => recruitment.account,
+  )
+  recruitment: Recruitment;
 
   @OneToMany(
     () => TimeOffRequests,
