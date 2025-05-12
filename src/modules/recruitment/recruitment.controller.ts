@@ -6,11 +6,16 @@ import {
   HttpStatus,
   Req,
   UsePipes,
+  Get,
+  Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCookieAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -40,7 +45,7 @@ interface IPayload {
 }
 
 @ApiCookieAuth()
-@ApiTags('Recruitment')
+@ApiTags('Recruitments')
 @Controller('recruitments')
 export class RecruitmentController {
   constructor(private readonly recruitmentService: RecruitmentService) {}
@@ -66,5 +71,17 @@ export class RecruitmentController {
       userId: req.user.sub,
     };
     return this.recruitmentService.create(payload);
+  }
+
+  @ApiOperation({ summary: 'Get single recruitment' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({ description: 'Ok' })
+  @ApiNotFoundResponse({
+    description: 'Recruitment with id not found',
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get(':id')
+  async getRecruitments(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.recruitmentService.getRecruitments(id);
   }
 }
