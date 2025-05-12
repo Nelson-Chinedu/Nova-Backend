@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import Recruitment from './entities/recruitment.entity';
 import Account from '../auth/entities/account.entity';
@@ -15,6 +15,7 @@ export class RecruitmentService {
     @InjectRepository(Recruitment)
     private recruitmentRepository: Repository<Recruitment>,
     @InjectRepository(Account) private accountRepository: Repository<Account>,
+    private dataSource: DataSource,
   ) {}
   async create(payload: {
     userId: string | undefined;
@@ -48,6 +49,28 @@ export class RecruitmentService {
         throw error;
       }
 
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async getRecruitments(id: string) {
+    try {
+      const result = await this.dataSource
+        .getRepository(Recruitment)
+        .createQueryBuilder('recruitment')
+        .select(['recruitment'])
+        .where('recruitment.id = :id', { id })
+        .getOne();
+
+      if (!result) {
+        throw new NotFoundException(`Recruitment with id ${id} not found`);
+      }
+
+      return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
       throw new InternalServerErrorException('An error occurred');
     }
   }
