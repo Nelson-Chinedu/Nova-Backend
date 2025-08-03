@@ -9,6 +9,9 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -17,11 +20,15 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RecruitmentService } from './recruitment.service';
-import { CreateRecruitmentDto } from './dto/recruitment.dto';
+import {
+  CreateRecruitmentDto,
+  PaginatedRecruitmentResponse,
+} from './dto/recruitment.dto';
 
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -75,13 +82,32 @@ export class RecruitmentController {
 
   @ApiOperation({ summary: 'Get single recruitment' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiOkResponse({ description: 'Ok' })
+  @ApiOkResponse({ description: 'Okk' })
   @ApiNotFoundResponse({
     description: 'Recruitment with id not found',
   })
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  async getRecruitments(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.recruitmentService.getRecruitments(id);
+  async getRecruitment(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.recruitmentService.getRecruitment(id);
+  }
+
+  @ApiOperation({ summary: 'Get all recruitments' })
+  @ApiQuery({ name: 'page', required: false, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
+  @ApiOkResponse({
+    type: PaginatedRecruitmentResponse,
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Get()
+  async getRecruitments(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
+    limit: number,
+    @Req() req: IReq,
+  ) {
+    const userId = req.user.sub;
+    return this.recruitmentService.getRecruitments(page, limit, userId);
   }
 }
