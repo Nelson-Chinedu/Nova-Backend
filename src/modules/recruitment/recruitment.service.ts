@@ -53,7 +53,7 @@ export class RecruitmentService {
     }
   }
 
-  async getRecruitments(id: string) {
+  async getRecruitment(id: string) {
     try {
       const result = await this.dataSource
         .getRepository(Recruitment)
@@ -67,6 +67,32 @@ export class RecruitmentService {
       }
 
       return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async getRecruitments(page: number, limit: number, userId: string) {
+    try {
+      const [data, total] = await this.dataSource
+        .getRepository(Recruitment)
+        .createQueryBuilder('recruitment')
+        .leftJoinAndSelect('recruitment.account', 'account')
+        .select(['recruitment'])
+        .where('account.id = :userId', { userId })
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+
+      return {
+        data,
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      };
     } catch (error) {
       if (error instanceof Error) {
         throw error;
