@@ -8,6 +8,7 @@ import Profile from './src/modules/profile/entities/profile.entity';
 
 import TimeOffRequests from './src/modules/time-off-request/entities/time-off-requests.entity';
 import Recruitment from './src/modules/recruitment/entities/recruitment.entity';
+import Candidate from './src/modules/candidate/entities/candiidate.entity';
 
 import getEnv from './src/helpers/getEnv';
 
@@ -51,7 +52,7 @@ export const config = {
   username: getEnv('DB_USERNAME'),
   password: getEnv('DB_PASSWORD'),
   database: getEnv('DB_DATABASE'),
-  entities: [Account, Profile, TimeOffRequests, Recruitment],
+  entities: [Account, Profile, TimeOffRequests, Recruitment, Candidate],
   migrations: ['dist/src/db/migrations/*.js'],
   // synchronize: isDevEnv() ? true : false,
   logging: isDevEnv() ? true : false,

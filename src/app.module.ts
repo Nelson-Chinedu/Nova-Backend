@@ -11,12 +11,13 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { TimeOffRequestsModule } from './modules/time-off-request/time-off-request.module';
+import { RecruitmentModule } from './modules/recruitment/recruitment.module';
+import { CandidateModule } from './modules/candidate/candidate.module';
 
 import { config } from '../ormconfig';
 
 import { AuthGuard } from './common/guards/auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
-import { RecruitmentModule } from './modules/recruitment/recruitment.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RecruitmentModule } from './modules/recruitment/recruitment.module';
     EmployeeModule,
     TimeOffRequestsModule,
     RecruitmentModule,
+    CandidateModule,
   ],
   controllers: [AppController],
   providers: [
