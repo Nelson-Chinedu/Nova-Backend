@@ -25,6 +25,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RecruitmentService } from './recruitment.service';
+
 import {
   CreateRecruitmentDto,
   PaginatedRecruitmentResponse,
@@ -49,6 +50,17 @@ interface IPayload {
   description: string;
   about_company: string;
   active_until: string;
+}
+
+export interface IAddPayload {
+  userId: string | undefined;
+  firstname: string;
+  lastname: string;
+  email: string;
+  social: string;
+  url: string;
+  pipeline_stage: string;
+  recruitment_id: string;
 }
 
 @ApiCookieAuth()

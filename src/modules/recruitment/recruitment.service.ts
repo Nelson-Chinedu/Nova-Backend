@@ -81,7 +81,7 @@ export class RecruitmentService {
         .getRepository(Recruitment)
         .createQueryBuilder('recruitment')
         .leftJoinAndSelect('recruitment.account', 'account')
-        .select(['recruitment'])
+        .select(['recruitment', 'account.id'])
         .where('account.id = :userId', { userId })
         .skip((page - 1) * limit)
         .take(limit)

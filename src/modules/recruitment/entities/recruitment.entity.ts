@@ -1,17 +1,20 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import Account from '../../auth/entities/account.entity';
+import Candiidate from '../../candidate/entities/candiidate.entity';
 
 @Entity('Recruitments')
-export default class Recruitment {
+export default class Recruitment extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -42,6 +45,9 @@ export default class Recruitment {
   })
   @JoinColumn()
   account: Account;
+
+  @OneToMany(() => Candiidate, (candidate: Candiidate) => candidate.recruitment)
+  candidates: Candiidate[];
 
   @CreateDateColumn()
   createdAt: Date;
