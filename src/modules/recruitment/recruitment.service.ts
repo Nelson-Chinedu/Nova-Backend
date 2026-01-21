@@ -2,12 +2,15 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 
 import Recruitment from './entities/recruitment.entity';
 import Account from '../auth/entities/account.entity';
+import { IAddPayload } from './recruitment.controller';
+import Candidate from '../candidate/entities/candiidate.entity';
 
 @Injectable()
 export class RecruitmentService {
@@ -15,6 +18,8 @@ export class RecruitmentService {
     @InjectRepository(Recruitment)
     private recruitmentRepository: Repository<Recruitment>,
     @InjectRepository(Account) private accountRepository: Repository<Account>,
+    @InjectRepository(Candidate)
+    private candidateRepository: Repository<Candidate>,
     private dataSource: DataSource,
   ) {}
   async create(payload: {
@@ -87,6 +92,73 @@ export class RecruitmentService {
         .take(limit)
         .getManyAndCount();
 
+      return {
+        data,
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async addCandidate({
+    payload,
+    params,
+  }: {
+    payload: IAddPayload;
+    params: { userId: string | undefined; recruitmentId: string | undefined };
+  }) {
+    const { userId, recruitmentId } = params;
+    try {
+      const user = await this.accountRepository.findOneBy({
+        id: userId,
+      });
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      const recruitment = await this.recruitmentRepository.findOneBy({
+        id: recruitmentId,
+      });
+
+      if (!recruitment) {
+        throw new NotFoundException('Recruitment not found');
+      }
+
+      const result = this.candidateRepository.create({
+        ...payload,
+        recruitment: { id: recruitmentId },
+      });
+      await this.candidateRepository.save(result);
+
+      return {
+        message: 'Candidate added successfully',
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('An error occurred');
+    }
+  }
+
+  async getCandidates(page: number, limit: number, recruitmentId: string) {
+    try {
+      const [data, total] = await this.dataSource
+        .getRepository(Candidate)
+        .createQueryBuilder('candidate')
+        .leftJoinAndSelect('candidate.recruitment', 'recruitment')
+        .select(['candidate', 'recruitment.id'])
+        .where('recruitment.id = :recruitmentId', { recruitmentId })
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
       return {
         data,
         total,

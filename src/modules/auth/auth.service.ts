@@ -148,7 +148,7 @@ export class AuthService {
         role: 'hr', // get the role from the account
       });
 
-      if (process.env.NODE_ENV === 'production' && !account.verified) {
+      if (process.env.NODE_ENV !== 'production' && !account.verified) {
         await this.mailService.sendMail({
           subject: 'Verify your account',
           recipient: this.configService.get('DEVELOPER_EMAIL') as string,

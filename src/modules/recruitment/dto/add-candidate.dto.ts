@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { PIPELINE_STAGE } from 'src/common/constant/pipeline-stage';
 
 export class AddCandidateDto {
@@ -41,14 +41,6 @@ export class AddCandidateDto {
       'pipeline_stage must be one of: sourced, in_progress, interview, hired, rejection',
   })
   pipeline_stage: PIPELINE_STAGE;
-
-  @ApiProperty({
-    description: 'Recruitment id',
-    default: '7a61c3a7-6d9a-4243-b919-41ab1e9ae507',
-  })
-  @IsNotEmpty()
-  @IsUUID()
-  recruitment_id: string;
 }
 
 export class AddCandidateResponse {
