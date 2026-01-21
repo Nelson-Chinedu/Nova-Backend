@@ -34,6 +34,9 @@ import {
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { SYSTEM_ROLES } from '../../common/constant/system-roles';
+import { AddCandidateDto, AddCandidateResponse } from './dto/add-candidate.dto';
+import { CreateDecorator } from 'src/common/decorators/swagger.decorator';
+import { PaginatedCandidateResponse } from './dto/get-candidates.dto';
 
 interface IReq {
   user: {
@@ -53,14 +56,12 @@ interface IPayload {
 }
 
 export interface IAddPayload {
-  userId: string | undefined;
   firstname: string;
   lastname: string;
   email: string;
   social: string;
   url: string;
   pipeline_stage: string;
-  recruitment_id: string;
 }
 
 @ApiCookieAuth()
@@ -121,5 +122,42 @@ export class RecruitmentController {
   ) {
     const userId = req.user.sub;
     return this.recruitmentService.getRecruitments(page, limit, userId);
+  }
+
+  @CreateDecorator({
+    summary: 'Add new candidate to a recruitment',
+    description: 'Candidate added successfully',
+    type: AddCandidateResponse,
+  })
+  @Roles(SYSTEM_ROLES.HR, SYSTEM_ROLES.ADMIN)
+  @UsePipes(new ValidationPipe())
+  @Post(':recruitmentId/candidates')
+  async addCandidate(
+    @Param('recruitmentId', new ParseUUIDPipe()) recruitmentId: string,
+    @Body() createCandiidateDto: AddCandidateDto,
+    @Req() req: IReq,
+  ) {
+    const payload = {
+      ...createCandiidateDto,
+    };
+    const params = {
+      recruitmentId,
+      userId: req.user.sub,
+    };
+    return await this.recruitmentService.addCandidate({ payload, params });
+  }
+
+  @ApiOperation({ summary: 'Get all candidates to a recruitment' })
+  @ApiQuery({ name: 'page', required: false, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({ type: PaginatedCandidateResponse })
+  @Get(':recruitmentId/candidates')
+  getCandidates(
+    @Param('recruitmentId', new ParseUUIDPipe()) recruitmentId: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    return this.recruitmentService.getCandidates(page, limit, recruitmentId);
   }
 }

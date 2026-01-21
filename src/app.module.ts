@@ -12,7 +12,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { TimeOffRequestsModule } from './modules/time-off-request/time-off-request.module';
 import { RecruitmentModule } from './modules/recruitment/recruitment.module';
-import { CandidateModule } from './modules/candidate/candidate.module';
+// import { CandidateModule } from './modules/candidate/candidate.module';
 
 import { config } from '../ormconfig';
 
@@ -28,7 +28,6 @@ import { RolesGuard } from './common/guards/roles.guard';
     EmployeeModule,
     TimeOffRequestsModule,
     RecruitmentModule,
-    CandidateModule,
   ],
   controllers: [AppController],
   providers: [

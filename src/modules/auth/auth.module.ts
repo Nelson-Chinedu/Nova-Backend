@@ -23,7 +23,7 @@ import {
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('VERIFICATION_JWT_kEY'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRATION_TIME') || '60s',
+          expiresIn: configService.get('JWT_EXPIRATION_TIME') ?? '60s',
         },
       }),
     }),
